@@ -1,4 +1,4 @@
-# Cadastro de Produtos Eletrônicos 🖥️
+# Gestão de Produtos 🖥️
 
 ### Projeto Pessoal com Python e MySQL
 #### Este projeto tem como objetivo criar um sistema de cadastro de produtos eletrônicos, utilizando Python para a lógica de programação e MySQL como sistema de gerenciamento de banco de dados (SGBD). O foco é desenvolver minhas habilidades e aprender mais sobre SGBD e SQL.
