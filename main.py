@@ -3,6 +3,8 @@ from config import db_config
 from classes.produto import Produto
 from classes.categoria import Categoria
 from classes.fornecedor import Fornecedor
+from classes.venda import Venda
+from datetime import date
 
 
 def menu_principal():
@@ -20,10 +22,21 @@ def menu_principal():
 def menu_produtos():
   print("""\n---Gerenciar Produtos---
     
-  [1] Cadastrar Produto
-  [2] Listar Produto
-  [3] Atualizar Produto
-  [4] Excluir Produto    
+  [1] Cadastrar Produtos
+  [2] Listar Produtos
+  [3] Atualizar Produtos
+  [4] Excluir Produtos   
+  """)
+  return input("-> ")
+
+
+def menu_vendas():
+  print("""\n---Gerenciar Vendas---
+    
+  [1] Cadastrar Vendas
+  [2] Listar Vendas
+  [3] Atualizar Vendas
+  [4] Excluir Vendas   
   """)
   return input("-> ")
 
@@ -69,19 +82,83 @@ def main():
       if opcao_produto == "1":
         if db.conectar(): 
           novo_produto = Produto(db)
+          categoria = Categoria(db)
+          fornecedor = Fornecedor(db)
         
         print("\n---Cadastrar Produtos---\n")
 
         nome = input("Nome: ")
         valor = float(input("Valor: R$"))
         quantidade = int(input("Quantidade: "))
-        categoria = ("Categoria: ")
-        fornecedor = ("Fornecedor: ")
 
-        novo_produto.cadastrarProduto(nome, valor,quantidade, categoria, fornecedor)
+        categoria.listarCategoria()
+        id_categoria = int(input("\nID da categoria do produto: "))
+
+        fornecedor.listarFornecedor()    
+        id_fornecedor = int(input("\nID do fornecedor do produto: "))
+
+        novo_produto.cadastrarProduto(nome, valor, quantidade, id_categoria, id_fornecedor)
           
         print("\nProduto inserido com sucesso!\n")
 
+        db.fechar()
+
+      elif opcao_produto == "2":
+        if db.conectar():
+          produto = Produto(db)
+
+        produto.listarProduto()
+
+        db.fechar()
+
+      elif opcao_produto == "3":
+        if db.conectar(): 
+          produto = Produto(db) # Cria instancia da classe produto
+
+          produto.listarProduto() 
+
+          id_produto = int(input("Qual ID do produto que deseja atualizar? "))
+
+          print("\nO que nao for atualizar, deixe em branco!\n")
+
+          nome = input("Atualizar nome: ").strip() or None
+          valor = input("Atualizar valor: ").strip() or None
+          quantidade = input("Atualizar Quantidade: ").strip() or None
+          id_categoria = input("Atualizar ID categoria: ").strip() or None
+          id_fornecedor = input("Atualizar ID fornecedor: ").strip() or None
+
+          produto.atualizarProduto(id_produto, nome, valor, quantidade, id_categoria, id_fornecedor)
+
+          db.fechar()
+
+      elif opcao_produto == "4":
+        if db.conectar():
+          produto = Produto(db)
+
+        produto.listarProduto()
+
+        id_produto = int(input("Qual ID do produto deseja excluir? "))
+
+        produto.excluirProduto(id_produto)
+
+        db.fechar()
+
+    if opcao == "2":
+      opcao_venda = menu_vendas()
+
+      if opcao_venda == "1":
+        if db.conectar():
+          venda = Venda(db)
+          produto = Produto(db)
+
+        data_venda = date.today()
+        produto.listarProduto()
+        id_produto = input("ID do produto: ")
+        quantidade = input("Quantidade: ")
+
+        venda.cadastrarVenda(data_venda, id_produto, quantidade)
+
+        db.fechar()
 
     if opcao == "3":
       opcao_categoria = menu_categorias()
@@ -122,7 +199,7 @@ def main():
 
           nova_categoria.listarCategoria() 
 
-          id_categoria = int(input("Qual ID do produto que deseja excluir? "))
+          id_categoria = int(input("\nQual ID do produto que deseja excluir? "))
 
           nova_categoria.excluirCategoria(id_categoria) 
 

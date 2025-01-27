@@ -36,7 +36,7 @@ class Categoria:
       categorias = cursor.fetchall()
       
       if categorias:
-        print("---Lista de Categorias---")
+        print("\n---Lista de Categorias---\n")
         for categoria in categorias:
           print(f"ID: {categoria[0]}, Nome: {categoria[1]}")
 

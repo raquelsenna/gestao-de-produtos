@@ -20,21 +20,20 @@ class Database:
       )
       
       if self.conexao.is_connected(): # confirma se a conexão foi bem sucedida
-        print("Conexão com o banco de dados estabelecida com sucesso!")
         return True
   
     except mysql.connector.Error as err:
-      print(f"Erro ao conectar ao banco de dados: {err}")
+      print(f"\nErro ao conectar ao banco de dados: {err}")
       return False
 
   # Confirma as alterações no banco de dados
   def commit(self):
     if self.conexao:
       self.conexao.commit()
-      print("Alterações confirmadas no banco de dados.")
+      print("\nAlterações confirmadas no banco de dados.")
       
   # encerra a conexão com banco de dados
   def fechar(self): 
     if self.conexao and self.conexao.is_connected:
       self.conexao.close()
-      print("Conexão com o banco de dados encerrada.")
+      print("\nConexão com o banco de dados encerrada.")

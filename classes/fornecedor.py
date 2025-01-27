@@ -36,9 +36,9 @@ class Fornecedor:
       fornecedores = cursor.fetchall()
       
       if fornecedores:
-        print("\n---Lista de Fornecedores---")
+        print("\n---Lista de Fornecedores---\n")
         for fornecedor in fornecedores:
-          print(f"ID: {fornecedor[0]}, Nome: {fornecedor[1]}, Email: {fornecedor[2]}, Telefone: {fornecedor[3]}\n")
+          print(f"ID: {fornecedor[0]}, Nome: {fornecedor[1]}, Email: {fornecedor[2]}, Telefone: {fornecedor[3]}")
 
     finally:
       if cursor:
@@ -96,7 +96,7 @@ class Fornecedor:
       valores = (id_fornecedor,)
       cursor.execute(query, valores)
       self.db.conexao.commit()
-      print("\nfornecedor excluído com sucesso!\n")
+      print("\nFornecedor excluído com sucesso!\n")
 
     except Exception as erro:
       print(f"Erro ao excluir fornecedor: {erro}")

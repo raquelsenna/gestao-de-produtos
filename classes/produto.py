@@ -4,7 +4,7 @@ class Produto:
   def __init__(self, db):
     self.db = db
   
-  def cadastrarProduto(self, nome, valor, quantidade, idCategoria, idFornecedor):
+  def cadastrarProduto(self, nome, valor, quantidade, id_categoria, id_fornecedor):
     try:
       cursor = self.db.conexao.cursor()
 
@@ -13,7 +13,7 @@ class Produto:
       VALUES (%s, %s, %s, %s, %s)
       """
 
-      valores = (nome, valor, quantidade, idCategoria, idFornecedor,)
+      valores = (nome, valor, quantidade, id_categoria, id_fornecedor,)
 
       cursor.execute(query, valores)
       self.db.conexao.commit()
@@ -27,8 +27,94 @@ class Produto:
       if cursor:
         cursor.close()
 
-  def atualizarProduto():
-    pass
+  def listarProduto(self):
+    try:
+      cursor = self.db.conexao.cursor()
+      
+      query = """
+      SELECT * FROM produtos; 
+      """
 
-  def atualizarQuantidade():
-    pass
+      cursor.execute(query)
+      produtos = cursor.fetchall()
+
+      if produtos:
+        print("\n--Lista de Produtos--\n")
+
+        for produto in produtos:
+          print(f"ID: {produto[0]}, Nome: {produto[1]}, Valor: {produto[2]}, Quantidade: {produto[3]}, Id_categoria: {produto[4]}, Id_fornecedor: {produto[5]}\n")
+
+    except Database.mysql.connector.Error as erro:
+      print(f"\nErro ao cadastrar produto: {erro}\n")
+      
+    finally:
+      if cursor:
+        cursor.close()
+
+  def atualizarProduto(self, id_produto, nome, valor, quantidade, id_categoria, id_fornecedor):
+    try:
+      cursor = self.db.conexao.cursor()
+
+      campos = []
+      valores = []
+
+      if nome:
+        campos.append("nome = %s")
+        valores.append(nome)
+
+      if valor:
+        campos.append("valor = %s")
+        valores.append(valor)
+
+      if quantidade:
+        campos.append("quantidade = %s")
+        valores.append(quantidade)
+
+      if id_categoria:
+        campos.append("id_categoria = %s")
+        valores.append(id_categoria)
+
+      if id_fornecedor:
+        campos.append("id_fornecedor = %s")
+        valores.append(id_fornecedor)
+
+      query = f"""
+        UPDATE produtos
+        SET {", ".join(campos)}
+        WHERE id_produto = %s;
+      """
+      
+      valores.append(id_produto)
+
+      cursor.execute(query, valores)
+      self.db.conexao.commit()
+      print("\nProduto atualizado com sucesso!")
+
+    except Exception as erro:
+      print(f"Erro ao atualizar produto: {erro}")
+
+    finally:
+      if cursor:
+        cursor.close()
+
+  def excluirProduto(self, id_produto): 
+    try:
+      cursor = self.db.conexao.cursor()
+
+      query = """
+      DELETE FROM produtos
+      WHERE id_produto = %s;
+      """
+
+      valores = (id_produto,)
+
+      cursor.execute(query, valores)
+      self.db.conexao.commit()
+      print("\nProduto excluído com sucesso!")
+  
+    except Exception as erro:
+      print(f"Erro ao excluir produto: {erro}")
+
+    finally:
+      if cursor:
+        cursor.close()
