@@ -1,13 +1,16 @@
 class Usuario:
   def __init__(self, email, senha):
-    self.email = "ADMIN"
-    self.senha = "admin123"
+    self.email = email
+    self.senha = senha
 
-  def login(self, email, senha):
-    if self.email == email:
-      if self.senha == senha:
+  def entrar(self, email, senha):
+    if email == self.email:
+      if senha == self.senha:
+        print("\nSistema iniciado!\n")
         return True
       else: 
-        print("Senha inválida!")
+        print("\nSenha inválida!\n")
+        return False
     else: 
-      print("Email inválido!")
+      print("\nEmail inválido!\n")
+      return False

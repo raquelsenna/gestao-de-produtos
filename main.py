@@ -1,14 +1,16 @@
-from database import Database
-from config import db_config
-from classes.produto import Produto
-from classes.categoria import Categoria
-from classes.fornecedor import Fornecedor
-from classes.venda import Venda
+# importar biblioteca padrão
 from datetime import date
+
+# importar módulos internos  
+from database import Database
+from config import db_config, login_acesso
+
+# importar classes
+from classes import Produto, Categoria, Fornecedor, Venda,  Usuario
 
 
 def menu_principal():
-  print("""\n---Sistema de Gestão---
+  print("""---Sistema de Gestão---
         
   [1] Gerenciar Produtos
   [2] Gerenciar Vendas
@@ -71,9 +73,29 @@ def main():
     database=db_config["database"]
   )
 
+  login = Usuario(
+    email=login_acesso["email"],
+    senha=login_acesso["senha"]
+  )
+
+  try:
+    print("\n---Login---")
+
+    while True:
+      email = input("Email: ")
+      senha = input("senha: ")
+
+      if login.entrar(email, senha) == True:
+        break
+      else:
+        continue
+
+  except Exception as erro:
+    print(f"Ocorreu um erro: {erro}")
+
+
   try:
     opcao = menu_principal()
-
 
     if opcao == "1":
 

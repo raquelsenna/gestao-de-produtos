@@ -5,3 +5,9 @@ db_config = {
   'password': 'sua_senha_aqui',
   'database': 'seu_banco_aqui'
 }
+
+# modelo do que precisa ser copiado para o login do sistema
+login_acesso = {
+  "email" : "seu_email_aqui",
+  "senha" : "sua_senha_aqui"
+}

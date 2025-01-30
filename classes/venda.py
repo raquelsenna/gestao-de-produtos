@@ -1,4 +1,5 @@
 from classes.produto import Produto
+from database import Database
 
 class Venda(Produto):
   def __init__(self, db):
@@ -32,8 +33,8 @@ class Venda(Produto):
       cursor.close()
 
 
-def atualizarQuantidade(self, id_produto, quantidade):
-    try:
+  def atualizarQuantidade(self, id_produto, quantidade):
+    # try:
       if self.db.conecar:
         produto = Produto()
 
@@ -78,16 +79,12 @@ def atualizarQuantidade(self, id_produto, quantidade):
       self.db.conexao.commit()
       print("\nVenda cadastrada com sucesso!")
 
-    except Exception as erro:
+    except Database.mysql.connector.Error as erro:
       print(f"Erro ao cadastrar venda: {erro}")
       
     finally:
       if cursor:
         cursor.close()
-
-
-  
-
 
   def listarVenda(self):
     pass
