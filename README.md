@@ -4,19 +4,19 @@
 ## Tecnologias utilizadas 
 - Linguagens de programação: Python, SQL.
 - SGBD: MySQL.
-- biliotetecaS: Mysql Connector.
+- biliotetecaS: Mysql Connector, datatime.
 
 ## Sobre
-### O projeto "Gestão de Produtos" tem como foco pequenos comércios e lojas que precisam de um sistema de software para auxiliar na produtividade e estabilidade do dia a dia.
+#### O projeto "Gestão de Produtos" tem como foco pequenos comércios e lojas que precisam de um sistema moderno e simples com o objetivo de auxiliar na produtividade e estabilidade do dia a dia do negócio.
 #### O projeto surgiu como uma ideia para a conclusão do curso "UML para Desenvolvimento de Software" no SENAC. Como projeto de conclusão do curso foi exigido apenas o UML, porém posteriormente, através da curiosidade e necessidade de praticar e entender como funcionam os sistemas, resolvi começar o desenvolvê-lo. O desenvolvimento é acontece desde o planejamento, isso é, UML e documentação, até a implentação do back-end, front-end e banco de dados.
 #### Atualmente está sendo desenvolvido as classes e suas relações. 
 
 ## Banco de Dados
-#### Como Sistema de Gerenciamento de Banco de Dados foi utilizado o MySQL. Foi criado um banco de dados chamado gestao_produtos, no qual contém as tabelas "vendas", "produtos", "categorias" e "fornecedores".
-#### As tabelas "vendas", "categorias" e "rnecedofores" mantém relacionamento com a tabela "produtos".
+#### Como SGBD foi utilizado o MySQL. Foi criado um banco de dados chamado gestao_produtos, no qual contém as tabelas "vendas", "produtos", "categorias" e "fornecedores".
+#### As tabelas "vendas", "categorias" e "fornecedores" mantém relacionamento com a tabela "produtos".
 
 ## Desenvolvimento
-#### Python foi a linguagem de programação principal escolhida, juntamente com POO como paradigma de programação. A estrutura de classes no python segue a mesma estrutura e relacionamento do banco de dados, tendo como acréscimo a tabela "Usuario" para fazer a autenticação do sistema.
+#### Python foi a linguagem de programação escolhida, juntamente com POO como paradigma de programação. A estrutura de classes no python segue a mesma estrutura e relacionamento do banco de dados, tendo como acréscimo a tabela "Usuario" para fazer a autenticação do sistema.
 
 ## Como rodar o sistema
 #### Na versão atual, o sistema pode ser rodado facilmente no terminal. 
