@@ -1,7 +1,9 @@
 # Gestão de Produtos 🖥️
 
-### Projeto Pessoal com Python e MySQL
+### Sobre o projeto
 #### Este projeto tem como objetivo criar um sistema de cadastro de produtos eletrônicos, utilizando Python para a lógica de programação e MySQL como sistema de gerenciamento de banco de dados (SGBD). O foco é desenvolver minhas habilidades e aprender mais sobre SGBD e SQL.
+#### Projeto pessoal com a finalidade de praticar e obter conhecimento acerca do desenvolvimento de software.
+#### As implementações que estão acontecendo podem ser encontradas na branch "feature/poo-cadastro-produtos".
 
 ## Tecnologias Utilizadas
 - Python: Linguagem de programação utilizada para o desenvolvimento da aplicação.
