@@ -1,36 +1,33 @@
 # Gestão de Produtos 🖥️
+#### Projeto pessoal com a finalidade de praticar e obter conhecimento acerca do desenvolvimento de software.
 
-### Projeto Pessoal com Python e MySQL
-#### Esse projeto tem como objetivo desenvolver um sistema de gestão de produtos, focado em negócios de pequeno a grande porte que precisam de um sistema automatizado no qual permita otimizar o seu dia a dia, o tornando mais produtivo e eficiente.
-
-## Tecnologias Utilizadas
-
-- Linguagem de Programação: Python, SQL.
--	Banco de dados: MySQL.
--	Bibliotecas: MySql Connector Python
+## Tecnologias utilizadas 
+- Linguagens de programação: Python, SQL.
+- SGBD: MySQL.
+- biliotetecaS: Mysql Connector.
 
 ## Funcionalidades do Projeto
 - Cadastro de novos produtos, vendas, categorias e fornecedores.
 - Leitura, atualização e remoção das colunas acima.
 - Gestão de estoque.
 - Capacidade de analizar dados para tomada de decisão dentro do negócio.
-  
-## Como Executar o Projeto
-1. Clone o repositório para sua máquina local.
-2. Instale as dependências _**pip install mysql-connector-python**_ no terminal.
-3. Banco de dados:
-  - Copie o arquivo `config_template.py` para `config.py`.
-  - Preencha as informações de banco de dados no arquivo `config.py`:
-      db_config = {
-        "host": "seu_localhost",
-        "user": "seu_root",
-        "password": "sua_senha",
-        "database": "seu_banco"
-      }
 
-4. Execute o projeto no Python.
+## Sobre
+### O projeto "Gestão de Produtos" tem como foco pequenos comércios e lojas que precisam de um sistema de software para auxiliar na produtividade e estabilidade do dia a dia.
+#### O projeto surgiu como uma ideia para a conclusão do curso "UML para Desenvolvimento de Software" no SENAC. Como projeto de conclusão do curso foi exigido apenas o UML, porém posteriormente, através da curiosidade e necessidade de praticar e entender como funcionam os sistemas, resolvi começar o desenvolvê-lo. O desenvolvimento é acontece desde o planejamento, isso é, UML e documentação, até a implentação do back-end, front-end e banco de dados.
+#### Atualmente está sendo desenvolvido as classes e suas relações. 
 
-## Melhorias Futuras
-- Implementar interface gráfica para o sistema.
-- Adicionar testes automatizados.
-- Expandir as funcionalidades de estoque para maior controle.
+## Banco de Dados
+#### Como Sistema de Gerenciamento de Banco de Dados foi utilizado o MySQL. Foi criado um banco de dados chamado gestao_produtos, no qual contém as tabelas "vendas", "produtos", "categorias" e "fornecedores".
+#### As tabelas "vendas", "categorias" e "rnecedofores" mantém relacionamento com a tabela "produtos".
+
+## Desenvolvimento
+#### Python foi a linguagem de programação principal escolhida, juntamente com POO como paradigma de programação. A estrutura de classes no python segue a mesma estrutura e relacionamento do banco de dados, tendo como acréscimo a tabela "Usuario" para fazer a autenticação do sistema.
+
+## Como rodar o sistema
+#### Na versão atual, o sistema pode ser rodado facilmente no terminal. 
+#### 1. No SGBD crie um banco de dados e siga o esquema do UML disponível na pasta de documentação para construir as tabelas e atributos.
+#### 2. Clone o repositório para sua máquina local.
+#### 3. Ao abrir o projeto, crie 1 aquivo chamado "config.py" e utilize o "config_tamplate.py" como base de código. Substitua os valores de "db_config" para o valor correspondente ao seu banco de dados e "login_acesso" para o email e senha que desejar.
+#### 4. Após isso, é possível rodar o sistema no terminal e ver as alterações acontecendo no banco de dados.
+
