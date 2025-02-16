@@ -6,7 +6,29 @@ from database import Database
 from config import db_config, login_acesso
 
 # importar classes
-from classes import Produto, Categoria, Fornecedor, Venda,  Usuario
+from classes import Produto, Categoria, Fornecedor, Venda, Usuario
+
+
+def login():
+  login = Usuario(
+    email=login_acesso["email"],
+    senha=login_acesso["senha"]
+  )
+
+  try:
+    print("\n---Login---")
+
+    while True:
+      email = input("Email: ")
+      senha = input("senha: ")
+
+      if login.entrar(email, senha) == True:
+        break
+      else:
+        continue
+
+  except Exception as erro:
+    print(f"Ocorreu um erro: {erro}")
 
 
 def menu_principal():
@@ -66,33 +88,14 @@ def menu_fornecedores():
 
 
 def main():
+  login()
+
   db = Database(
     host=db_config["host"],
     user=db_config["user"],
     password=db_config["password"],
     database=db_config["database"]
-  )
-
-  login = Usuario(
-    email=login_acesso["email"],
-    senha=login_acesso["senha"]
-  )
-
-  try:
-    print("\n---Login---")
-
-    while True:
-      email = input("Email: ")
-      senha = input("senha: ")
-
-      if login.entrar(email, senha) == True:
-        break
-      else:
-        continue
-
-  except Exception as erro:
-    print(f"Ocorreu um erro: {erro}")
-
+  ) 
 
   try:
     opcao = menu_principal()
@@ -120,8 +123,6 @@ def main():
         id_fornecedor = int(input("\nID do fornecedor do produto: "))
 
         novo_produto.cadastrarProduto(nome, valor, quantidade, id_categoria, id_fornecedor)
-          
-        print("\nProduto inserido com sucesso!\n")
 
         db.fechar()
 
@@ -145,7 +146,7 @@ def main():
 
           nome = input("Atualizar nome: ").strip() or None
           valor = input("Atualizar valor: ").strip() or None
-          quantidade = input("Atualizar Quantidade: ").strip() or None
+          quantidade = input("Atualizar quantidade: ").strip() or None
           id_categoria = input("Atualizar ID categoria: ").strip() or None
           id_fornecedor = input("Atualizar ID fornecedor: ").strip() or None
 
@@ -175,10 +176,23 @@ def main():
 
         data_venda = date.today()
         produto.listarProduto()
-        id_produto = input("ID do produto: ")
-        quantidade = input("Quantidade: ")
+        id_produto = int(input("ID do produto: "))
+        quantidade = int(input("Quantidade: "))
 
-        venda.cadastrarVenda(data_venda, id_produto, quantidade)
+        if produto.consultarEstoque(id_produto, quantidade):         
+          valor_unitario = produto.buscar_valor(id_produto)
+          venda.cadastrarVenda(data_venda, id_produto, quantidade, valor_unitario)
+          produto.atualizarEstoque(id_produto, quantidade)
+        else:
+          print("Estoque insuficiente!")
+
+        db.fechar()
+
+      if opcao_venda == "2":
+        if db.conectar():
+          venda = Venda(db)
+
+        venda.listarVenda()
 
         db.fechar()
 
@@ -227,7 +241,6 @@ def main():
 
           db.fechar()
 
-  
     if opcao == "4":
       opcao_fornecedor = menu_fornecedores()
 

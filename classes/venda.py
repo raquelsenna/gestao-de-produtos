@@ -1,96 +1,64 @@
-from classes.produto import Produto
 from database import Database
 
-class Venda(Produto):
+class Venda():
   def __init__(self, db):
-    self.db = db 
+    self.db = db
+
   
-  def valorTotal(self, id_produto, quantidade):
+  def cadastrarVenda(self, data_venda, id_produto, quantidade, valor_unitario):
     try:
-      cursor = self.db.conexao.cursor()
+      cursor = self.db.conexao.cursor() 
+
+      valor_total = valor_unitario * quantidade
 
       query = """
-      SELECT valor 
-      FROM produtos
-      WHERE id_produto = %s
+      INSERT INTO vendas (data_venda, id_produto, quantidade, valor_total)
+      VALUES (%s, %s, %s, %s)
       """
 
-      cursor.execute(query, (id_produto,))
-      result = cursor.fetchone()
+      valores = (data_venda, id_produto, quantidade, valor_total,)
+      
+      cursor.execute(query, valores)
+      self.db.conexao.commit()
 
-      if not result:
-        raise ValueError(f"Produto com ID {id_produto} não encontrado.")
+      print("\nVenda cadastrada com sucesso!\n")
 
-      valor_produto = result[0]
-
-      return quantidade * valor_produto
-    
-    except Exception as e:
-      print(f"Erro ao calcular o valor total: {e}")
+    except Exception as error:
+      print(f"Erro ao cadastrar venda: {error}")
       return None
 
     finally:
       cursor.close()
 
 
-  def atualizarQuantidade(self, id_produto, quantidade):
-    # try:
-      if self.db.conecar:
-        produto = Produto()
-
-      cursor = self.db.conexao.cursor()
-
-      query = """
-      SELECET quantidade 
-      FROM produto 
-      WHERE id_produto = %s"""
-
-      cursor.execute(query, (id_produto,))
-
-      result = cursor.fetchone()
-
-      if not result:
-        raise ValueError(f"Produto com ID {id_produto} não encontrado.")
-
-      atualização_estoque = quantidade - self.quantidade
-      
-      if quantidade < 0:
-        print("Estoque indisponível!")
-      else:
-        produto.atualizarProduto(atualização_estoque)
-
-
-  def cadastrarVenda(self, data_venda, id_produto, quantidade):
+  def listarVenda(self):
     try:
       cursor = self.db.conexao.cursor()
 
-      valor_total = self.valorTotal(id_produto, quantidade)
-
-      if valor_total is None:
-            raise ValueError("Erro ao calcular o valor total.")
-
       query = """
-      INSERT INTO vendas(data_venda, id_produto, quantidade, valor_total)
-      VALUES (%s, %s, %s, %s)
+      SELECT * FROM vendas
       """
-
-      valores = (data_venda, id_produto, quantidade, valor_total,)
-      cursor.execute(query, valores)
-      self.db.conexao.commit()
-      print("\nVenda cadastrada com sucesso!")
-
-    except Database.mysql.connector.Error as erro:
-      print(f"Erro ao cadastrar venda: {erro}")
       
+      cursor.execute(query)
+      vendas = cursor.fetchall()
+
+      if vendas:
+        print("\n---Lista de Vendas---\n")
+
+        for venda in vendas:
+          print(f"ID: {venda[0]}, Data: {venda[1]}, ID Produto: {venda[2]}, Quantidade: {venda[3]}, Valor Total: {venda[4]}")
+    
+    except Exception as erro:
+      print(f"Erro ao listar vendas: {erro}")
+
     finally:
       if cursor:
         cursor.close()
 
-  def listarVenda(self):
-    pass
 
   def atualizarVenda(self):
     pass
 
-  def excluirrVenda(self):
+
+  def excluirVenda(self):
     pass

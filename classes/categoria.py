@@ -10,7 +10,6 @@ class Categoria:
       INSERT INTO categorias (nome)
       VALUES (%s)
       """
-
       valores = (nome,)
       
       cursor.execute(query, valores)
