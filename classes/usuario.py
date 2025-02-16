@@ -3,7 +3,7 @@ class Usuario:
     self.email = email
     self.senha = senha
 
-  def entrar(self, email, senha):
+  def autenticar(self, email, senha):
     if email == self.email:
       if senha == self.senha:
         print("\nSistema iniciado!\n")

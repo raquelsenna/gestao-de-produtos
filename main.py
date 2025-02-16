@@ -6,7 +6,29 @@ from database import Database
 from config import db_config, login_acesso
 
 # importar classes
-from classes import Produto, Categoria, Fornecedor, Venda,  Usuario
+from classes import Produto, Categoria, Fornecedor, Venda, Usuario
+
+# função que acessa informações de login no arquivo config.py
+def login():
+  login = Usuario(
+    email=login_acesso["email"],
+    senha=login_acesso["senha"]
+  )
+
+  try:
+    print("\n---Login---")
+
+    while True:
+      email = input("Email: ")
+      senha = input("Senha: ")
+
+      if login.autenticar(email, senha) == True:
+        break
+      else:
+        continue
+
+  except Exception as erro:
+    print(f"Ocorreu um erro: {erro}")
 
 
 def menu_principal():
@@ -66,33 +88,14 @@ def menu_fornecedores():
 
 
 def main():
+  login()
+
   db = Database(
     host=db_config["host"],
     user=db_config["user"],
     password=db_config["password"],
     database=db_config["database"]
-  )
-
-  login = Usuario(
-    email=login_acesso["email"],
-    senha=login_acesso["senha"]
-  )
-
-  try:
-    print("\n---Login---")
-
-    while True:
-      email = input("Email: ")
-      senha = input("senha: ")
-
-      if login.entrar(email, senha) == True:
-        break
-      else:
-        continue
-
-  except Exception as erro:
-    print(f"Ocorreu um erro: {erro}")
-
+  ) 
 
   try:
     opcao = menu_principal()
@@ -103,7 +106,7 @@ def main():
 
       if opcao_produto == "1":
         if db.conectar(): 
-          novo_produto = Produto(db)
+          produto = Produto(db)
           categoria = Categoria(db)
           fornecedor = Fornecedor(db)
         
@@ -119,9 +122,7 @@ def main():
         fornecedor.listarFornecedor()    
         id_fornecedor = int(input("\nID do fornecedor do produto: "))
 
-        novo_produto.cadastrarProduto(nome, valor, quantidade, id_categoria, id_fornecedor)
-          
-        print("\nProduto inserido com sucesso!\n")
+        produto.cadastrarProduto(nome, valor, quantidade, id_categoria, id_fornecedor)
 
         db.fechar()
 
@@ -145,7 +146,7 @@ def main():
 
           nome = input("Atualizar nome: ").strip() or None
           valor = input("Atualizar valor: ").strip() or None
-          quantidade = input("Atualizar Quantidade: ").strip() or None
+          quantidade = input("Atualizar quantidade: ").strip() or None
           id_categoria = input("Atualizar ID categoria: ").strip() or None
           id_fornecedor = input("Atualizar ID fornecedor: ").strip() or None
 
@@ -175,10 +176,23 @@ def main():
 
         data_venda = date.today()
         produto.listarProduto()
-        id_produto = input("ID do produto: ")
-        quantidade = input("Quantidade: ")
+        id_produto = int(input("ID do produto: "))
+        quantidade = int(input("Quantidade: "))
 
-        venda.cadastrarVenda(data_venda, id_produto, quantidade)
+        if produto.consultarEstoque(id_produto, quantidade):         
+          valor_unitario = produto.buscarValor(id_produto)
+          venda.cadastrarVenda(data_venda, id_produto, quantidade, valor_unitario)
+          produto.atualizarEstoque(id_produto, quantidade)
+        else:
+          print("Estoque insuficiente!")
+
+        db.fechar()
+
+      if opcao_venda == "2":
+        if db.conectar():
+          venda = Venda(db)
+
+        venda.listarVenda()
 
         db.fechar()
 
@@ -187,75 +201,74 @@ def main():
 
       if opcao_categoria == "1":
         if db.conectar(): 
-          nova_categoria = Categoria(db) # Cria instancia da classe Categoria
+          categoria = Categoria(db) # Cria instancia da classe Categoria
           
           nome = input("Nome: ")
-          nova_categoria.cadastrarCategoria(nome) 
+          categoria.cadastrarCategoria(nome) 
           db.fechar()
       
       elif opcao_categoria == '2':
         if db.conectar(): 
-          nova_categoria = Categoria(db) # Cria instancia da classe Categoria
+          categoria = Categoria(db) # Cria instancia da classe Categoria
 
-          nova_categoria.listarCategoria() 
+          categoria.listarCategoria() 
           db.fechar()
       
       
       elif opcao_categoria == '3':
         if db.conectar(): 
-          nova_categoria = Categoria(db) # Cria instancia da classe Categoria
+          categoria = Categoria(db) # Cria instancia da classe Categoria
 
-          nova_categoria.listarCategoria() 
+          categoria.listarCategoria() 
 
           id_categoria = int(input("Qual ID do produto que deseja atualizar? "))
 
           nome = input("Atualizar para nome: ")
           
-          nova_categoria.atualizarCategoria(id_categoria, nome) 
+          categoria.atualizarCategoria(id_categoria, nome) 
 
           db.fechar()
 
       elif opcao_categoria == '4':
         if db.conectar(): 
-          nova_categoria = Categoria(db) # Cria instancia da classe Categoria
+          categoria = Categoria(db) # Cria instancia da classe Categoria
 
-          nova_categoria.listarCategoria() 
+          categoria.listarCategoria() 
 
           id_categoria = int(input("\nQual ID do produto que deseja excluir? "))
 
-          nova_categoria.excluirCategoria(id_categoria) 
+          categoria.excluirCategoria(id_categoria) 
 
           db.fechar()
 
-  
     if opcao == "4":
       opcao_fornecedor = menu_fornecedores()
 
       if opcao_fornecedor == "1":
         if db.conectar(): 
-          novo_fornecedor = Fornecedor(db) # Cria instancia da classe Fornecedor
+          fornecedor = Fornecedor(db) # Cria instancia da classe Fornecedor
           
           nome = input("Nome: ")
           email = input("Email: ")
           telefone = input("Telefone: ")
 
-          novo_fornecedor.cadastrarFornecedor(nome, email, telefone) 
+          fornecedor.cadastrarFornecedor(nome, email, telefone) 
 
           db.fechar()
 
       elif opcao_fornecedor == "2":
         if db.conectar():
-          novo_fornecedor = Fornecedor(db)
+          fornecedor = Fornecedor(db)
 
-          novo_fornecedor.listarFornecedor() 
+          fornecedor.listarFornecedor() 
 
           db.fechar()
 
       elif opcao_fornecedor == '3':
         if db.conectar(): 
-          novo_fornecedor = Fornecedor(db) # Cria instancia da classe fornecedor
+          fornecedor = Fornecedor(db) # Cria instancia da classe fornecedor
 
-          novo_fornecedor.listarFornecedor() 
+          fornecedor.listarFornecedor() 
 
           id_fornecedor = int(input("Qual ID do fornecedor que deseja atualizar? "))
 
@@ -265,19 +278,19 @@ def main():
           email = input("Atualizar email: ").strip() or None
           telefone = input("Atualizar telefone: ").strip() or None
 
-          novo_fornecedor.atualizarFornecedor(id_fornecedor, nome, email, telefone)
+          fornecedor.atualizarFornecedor(id_fornecedor, nome, email, telefone)
 
           db.fechar()
       
       elif opcao_fornecedor == '4':
         if db.conectar(): 
-          novo_fornecedor = Fornecedor(db) # Cria instancia da classe fornecedor
+          fornecedor = Fornecedor(db) # Cria instancia da classe fornecedor
 
-          novo_fornecedor.listarFornecedor() 
+          fornecedor.listarFornecedor() 
 
           id_fornecedor = int(input("Qual ID do fornecedor que deseja excluir? "))
 
-          novo_fornecedor.excluirFornecedor(id_fornecedor) 
+          fornecedor.excluirFornecedor(id_fornecedor) 
 
           db.fechar()
         

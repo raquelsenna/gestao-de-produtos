@@ -2,18 +2,17 @@ class Categoria:
   def __init__(self, db):
     self.db = db
 
+
   def cadastrarCategoria(self, nome):
     try:
-      cursor = self.db.conexao.cursor() #criação do cursor
+      cursor = self.db.conexao.cursor()
 
       query = """
       INSERT INTO categorias (nome)
       VALUES (%s)
       """
 
-      valores = (nome,)
-      
-      cursor.execute(query, valores)
+      cursor.execute(query, (nome,))
       self.db.conexao.commit()
       print("\nCategoria cadastrada com sucesso!\n")
 
@@ -23,6 +22,7 @@ class Categoria:
     finally:
       if cursor:
         cursor.close()
+
 
   def listarCategoria(self):
     try:
@@ -67,6 +67,7 @@ class Categoria:
       if cursor:
         cursor.close()
 
+
   def excluirCategoria(self, id_categoria):
     try:
       cursor = self.db.conexao.cursor()
@@ -76,8 +77,7 @@ class Categoria:
         WHERE id_categoria = %s;
       """
       
-      valores = (id_categoria,)
-      cursor.execute(query, valores)
+      cursor.execute(query, (id_categoria,))
       self.db.conexao.commit()
       print("\nCategoria excluída com sucesso!\n")
 

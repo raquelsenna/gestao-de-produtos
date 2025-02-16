@@ -2,6 +2,7 @@ class Fornecedor:
   def __init__(self, db):
     self.db = db
 
+
   def cadastrarFornecedor(self, nome, email, telefone):
     try:
       cursor = self.db.conexao.cursor()
@@ -23,6 +24,7 @@ class Fornecedor:
     finally:
       if cursor:
         cursor.close()
+
 
   def listarFornecedor(self):
     try:
@@ -93,8 +95,7 @@ class Fornecedor:
         WHERE id_fornecedor = %s;
       """
       
-      valores = (id_fornecedor,)
-      cursor.execute(query, valores)
+      cursor.execute(query, (id_fornecedor,))
       self.db.conexao.commit()
       print("\nFornecedor excluído com sucesso!\n")
 
