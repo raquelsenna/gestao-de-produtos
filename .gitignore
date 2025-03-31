@@ -1,2 +1,3 @@
-keys.env
+config.py
 desktop.ini
+__pycache__/
