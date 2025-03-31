@@ -8,7 +8,6 @@ from config import db_config, login_acesso
 # importar classes
 from classes import Produto, Categoria, Fornecedor, Venda, Usuario
 
-# função que acessa informações de login no arquivo config.py
 def login():
   login = Usuario(
     email=login_acesso["email"],
@@ -20,9 +19,9 @@ def login():
 
     while True:
       email = input("Email: ")
-      senha = input("Senha: ")
+      senha = input("senha: ")
 
-      if login.autenticar(email, senha) == True:
+      if login.entrar(email, senha) == True:
         break
       else:
         continue

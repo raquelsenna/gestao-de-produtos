@@ -11,8 +11,9 @@ class Categoria:
       INSERT INTO categorias (nome)
       VALUES (%s)
       """
-
-      cursor.execute(query, (nome,))
+      valores = (nome,)
+      
+      cursor.execute(query, valores)
       self.db.conexao.commit()
       print("\nCategoria cadastrada com sucesso!\n")
 

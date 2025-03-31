@@ -54,3 +54,11 @@ class Venda():
     finally:
       if cursor:
         cursor.close()
+
+
+  def atualizarVenda(self):
+    pass
+
+
+  def excluirVenda(self):
+    pass
