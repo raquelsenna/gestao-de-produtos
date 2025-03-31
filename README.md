@@ -1,33 +1,33 @@
 # Gestão de Produtos 🖥️
+#### Projeto pessoal com a finalidade de praticar e obter conhecimento acerca de Desenvolvimento de Doftware, Integração de Sistemas e APIs.
 
-### Sobre o projeto
-#### Este projeto tem como objetivo criar um sistema de cadastro de produtos eletrônicos, utilizando Python para a lógica de programação e MySQL como sistema de gerenciamento de banco de dados (SGBD). O foco é desenvolver minhas habilidades e aprender mais sobre SGBD e SQL.
-#### Projeto pessoal com a finalidade de praticar e obter conhecimento acerca do desenvolvimento de software.
-#### As implementações que estão acontecendo podem ser encontradas na branch "feature/poo-cadastro-produtos".
+## Tecnologias Utilizadas 
+- Linguagens de programação: Python, SQL.
+- Banco de Dados: MySQL.
+- Bibliotetecas: Mysql Connector.
 
-## Tecnologias Utilizadas
-- Python: Linguagem de programação utilizada para o desenvolvimento da aplicação.
-- MySQL: Banco de dados utilizado para armazenar as informações dos produtos.
-- SQL: Linguagem de consulta para interação com o banco de dados.
-  
-## Conexão com o Banco de Dados
-#### Para conectar o banco de dados MySQL ao Python, foram utilizadas as seguintes bibliotecas:
-- mysql-connector-python: Escolhida pela facilidade de uso e compatibilidade direta com MySQL.
-- python-dotenv: Utilizada para proteger credenciais sensíveis do banco de dados, como usuário e senha, evitando que apareçam nos commits do Git. Mesmo em projetos simples, é importante sempre seguir boas práticas de segurança.
+## Funcionalidades do Sistema
+- Cadastro, leitura, atualização e remoção de produtos, categorias e fornecedores.
+- Cadastro e leitura de vendas.
+- Controle de estoque.
+- Capacidade de analizar dados para tomada de decisão.
 
-## Funcionalidades do Projeto
-- Cadastro de novos produtos eletrônicos.
-- Edição e remoção de produtos existentes.
-- Consulta de produtos cadastrados.
-- Armazenamento seguro das informações no banco de dados.
-  
-## Como Executar o Projeto
-1. Clone o repositório para sua máquina local.
-2. Instale as dependências _**pip install mysql-connector-python**_ e _**pip install python-dotenv**_ no terminal.
-3. Crie um arquivo .env com suas credenciais de banco de dados, se necessário.
-4. Execute o script Python.
+## Sobre
+O projeto "Gestão de Produtos" tem como foco pequenos comércios e lojas que precisam de um sistema de software para auxiliar na produtividade e estabilidade do dia a dia.
+####
+O projeto surgiu como uma ideia para a conclusão do curso "UML para Desenvolvimento de Software" no SENAC. Como projeto de conclusão do curso foi exigido apenas o UML, porém posteriormente, através da curiosidade e necessidade de praticar e entender como funcionam os sistemas, resolvi começar a desenvolvê-lo. A aplicação se dá desde o planejamento - aplicando conhecimentos acerca de Engenharia de Software - até a implementação do back-end, front-end e banco de dados.
 
-## Melhorias Futuras
-- Implementar interface gráfica (GUI) para o sistema.
-- Adicionar testes automatizados.
-- Expandir as funcionalidades para incluir categorias de produtos.
+## Banco de Dados
+No MySQL foi criado um banco de dados chamado gestao_produtos, no qual contém as tabelas "vendas", "produtos", "categorias" e "fornecedores".
+#### 
+As tabelas "vendas", "categorias" e "fornecedores" mantém relacionamento com a tabela "produtos".
+
+## Desenvolvimento
+Python foi a linguagem de programação escolhida, juntamente com POO como paradigma de programação. A estrutura de classes no Python segue a mesma estrutura e relacionamento do banco de dados, tendo como acréscimo a tabela "Usuario" para fazer a autenticação do sistema.
+
+## Como Rodar o Sistema
+#### Na versão atual, o sistema pode ser rodado facilmente no terminal. 
+#### 1. No SGBD crie um banco de dados e siga o esquema do UML disponível na pasta "docs" para construir as tabelas e atributos.
+#### 2. Clone o repositório para sua máquina local.
+#### 3. Ao abrir o projeto, crie 1 arquivo chamado "config.py" e utilize o "config_tamplate.py" como base de código. Substitua os valores de "db_config" para o valor correspondente ao seu banco de dados e "login_acesso" para o email e senha que desejar.
+#### 4. Após isso, é possível rodar o sistema no terminal e ver as alterações acontecendo no banco de dados.
