@@ -19,4 +19,4 @@ O projeto surgiu como uma ideia para a conclusão do curso "UML para Desenvolvim
 ## Documentação
 Para mais detalhes sobre arquitetura, banco de dados, integração e etc, acesse a documentação abaixo.
 ####
-[Documentação](https://github.com/raquelsenna/gestao-de-produtos.wiki.git)
+[Documentação](https://github.com/raquelsenna/gestao-de-produtos/wiki)
