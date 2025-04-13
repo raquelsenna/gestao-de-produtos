@@ -22,7 +22,7 @@ Este é um sistema de cadastro e gerenciamento de produtos, desenvolvido em **Py
 - ` pip install -r requisitos.txt `
 
 3. **Configure a conexão com o banco de dados:**
-- No arquivo `config_template.py`, atualize com os seus dados de acesso ao MySQL.
+- No arquivo `config_template.py`, o renomeie para `config.py` e atualize com os seus dados de acesso ao MySQL.
 
 5. **Execute o programa:**
 - `python main.py`
