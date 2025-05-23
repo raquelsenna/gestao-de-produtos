@@ -21,7 +21,7 @@ def login():
       email = input("Email: ")
       senha = input("senha: ")
 
-      if login.entrar(email, senha) == True:
+      if login.autenticar(email, senha) == True:
         break
       else:
         continue
@@ -57,9 +57,7 @@ def menu_vendas():
   print("""\n---Gerenciar Vendas---
     
   [1] Cadastrar Vendas
-  [2] Listar Vendas
-  [3] Atualizar Vendas
-  [4] Excluir Vendas   
+  [2] Listar Vendas  
   """)
   return input("-> ")
 
