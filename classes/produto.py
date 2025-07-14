@@ -106,8 +106,6 @@ class Produto:
 
   def cadastrarProduto(self, nome, valor, quantidade, id_categoria, id_fornecedor):
     try:
-      cursor = self.db.conexao.cursor()
-
       query = """
       INSERT INTO produtos (nome, valor, quantidade, id_categoria, id_fornecedor)
       VALUES (%s, %s, %s, %s, %s)
@@ -115,45 +113,33 @@ class Produto:
 
       valores = (nome, valor, quantidade, id_categoria, id_fornecedor,)
 
-      cursor.execute(query, valores)
-      self.db.conexao.commit()
+      self.db.executar(query, valores)
 
       print("\nProduto cadastrado com sucesso!\n")
 
     except Database.mysql.connector.Error as erro:
       print(f"Erro ao cadastrar produto: {erro}")
-      
-    finally:
-      if cursor:
-        cursor.close()
 
 
   def listarProduto(self):
     try:
-      cursor = self.db.conexao.cursor()
-      
       query = """
       SELECT * FROM produtos; 
       """
 
-      cursor.execute(query)
-      produtos = cursor.fetchall()
-
+      produtos = self.db.buscar(query)
+      
       if produtos:
         print("\n--Lista de Produtos--\n")
 
         for produto in produtos:
           print(f"ID: {produto[0]}, Nome: {produto[1]}, Valor: {produto[2]}, Quantidade: {produto[3]}, Id_categoria: {produto[4]}, Id_fornecedor: {produto[5]}\n")
-      
+        
       else: 
         print("Não há produtos.")
 
     except Database.mysql.connector.Error as erro:
-      print(f"\nErro ao cadastrar produto: {erro}\n")
-      
-    finally:
-      if cursor:
-        cursor.close()
+      print(f"\nErro ao listar produto: {erro}\n")
 
 
   def atualizarProduto(self, id_produto, nome, valor, quantidade, id_categoria, id_fornecedor):

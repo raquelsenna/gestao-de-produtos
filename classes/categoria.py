@@ -88,4 +88,3 @@ class Categoria:
     finally:
       if cursor:
         cursor.close()
-

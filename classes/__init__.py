@@ -4,3 +4,4 @@ from .categoria import Categoria
 from .fornecedor import Fornecedor
 from .venda import Venda
 from .usuario import Usuario
+from .container import Container

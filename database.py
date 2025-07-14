@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 
+
 class Database:
   def __init__(self, host, user, password, database):
     self.host = host
@@ -26,11 +27,26 @@ class Database:
       print(f"\nErro ao conectar ao banco de dados: {err}")
       return False
 
+
+  def executar(self, query, valores):
+    cursor = self.conexao.cursor()
+    cursor.execute(query, valores or ())
+    self.conexao.commit()
+    cursor.close()
+
+
+  def buscar(self, query, valores):
+    cursor = self.conexao.cursor()
+    cursor.execute(query, valores or ())
+    resultados = cursor.fetchall()
+    cursor.close()
+    return resultados
+
   # Confirma as alterações no banco de dados
-  def commit(self):
-    if self.conexao:
-      self.conexao.commit()
-      print("\nAlterações confirmadas no banco de dados.")
+  # def commit(self):
+  #   if self.conexao:
+  #     self.conexao.commit()
+  #     print("\nAlterações confirmadas no banco de dados.")
       
   # encerra a conexão com banco de dados
   def fechar(self): 
