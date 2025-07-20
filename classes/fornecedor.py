@@ -2,10 +2,10 @@ from database import Database
 
 class Fornecedor:
   def __init__(self, db):
-    self.db = db
+    self.__db = db
 
 
-  def cadastrarFornecedor(self, nome, email, telefone):
+  def cadastrar_fornecedor(self, nome, email, telefone):
     try:
       query = """
       INSERT INTO fornecedores (nome, email, telefone)
@@ -14,7 +14,7 @@ class Fornecedor:
 
       valores = (nome, email, telefone,)
 
-      self.db.executar(query, valores)
+      self.__db.executar(query, valores)
 
       print("Fornecedor cadastrado com Sucesso!")
     
@@ -22,13 +22,13 @@ class Fornecedor:
       print(f"Erro ao cadastrar fornecedor: {erro}")
 
 
-  def listarFornecedor(self):
+  def listar_fornecedor(self):
     try:
       query = """
         SELECT * FROM fornecedores;
       """
       
-      fornecedores = self.db.buscar(query)
+      fornecedores = self.__db.buscar(query)
       
       if fornecedores:
         print("\n---Lista de Fornecedores---\n")
@@ -41,7 +41,7 @@ class Fornecedor:
       print(f"\nErro ao listar fornecedores: {erro}\n")
 
 
-  def atualizarFornecedor(self, id_fornecedor, nome, email, telefone):
+  def atualizar_fornecedor(self, id_fornecedor, nome, email, telefone):
     try:
       campos = []
       valores = []
@@ -66,7 +66,7 @@ class Fornecedor:
       
       valores.append(id_fornecedor)
 
-      self.db.executar(query, valores)
+      self.__db.executar(query, valores)
 
       print("\nFornecedor atualizado com sucesso!\n")
 
@@ -74,14 +74,14 @@ class Fornecedor:
       print(f"Erro ao atualizar fornecedor: {erro}")
 
 
-  def excluirFornecedor(self, id_fornecedor):
+  def excluir_fornecedor(self, id_fornecedor):
     try:
       query = """
         DELETE FROM fornecedores 
         WHERE id_fornecedor = %s;
       """
 
-      self.db.executar(query, (id_fornecedor,))
+      self.__db.executar(query, (id_fornecedor,))
 
       print("\nFornecedor excluído com sucesso!\n")
 

@@ -29,15 +29,9 @@ class Database:
 
   def executar(self, query, valores):
     cursor = self.conexao.cursor()
-    print("cursor criado")
-    print(f"Tipos dos valores: {[type(v) for v in valores]}")
-    print("Valores:", valores)
     cursor.execute(query, valores) # ERRO
-    print("query executada")
     self.conexao.commit()
-    print("alteraçoes salvas")
     cursor.close()
-    print("cursor fechado")
 
 
   def buscar(self, query, valores=None):

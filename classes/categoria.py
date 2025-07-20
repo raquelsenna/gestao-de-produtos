@@ -2,10 +2,10 @@ from database import Database
 
 class Categoria:
   def __init__(self, db):
-    self.db = db
+    self.__db = db
 
 
-  def cadastrarCategoria(self, nome):
+  def cadastrar_Categoria(self, nome):
     try:
       query = """
       INSERT INTO categorias (nome)
@@ -14,7 +14,7 @@ class Categoria:
 
       valores = (nome,)
       
-      self.db.executar(query, valores)
+      self.__db.executar(query, valores)
       
       print("\nCategoria cadastrada com sucesso!\n")
 
@@ -22,13 +22,13 @@ class Categoria:
       print(f"Erro ao cadastrar categoria: {erro}")
 
 
-  def listarCategoria(self):
+  def listar_categoria(self):
     try:
       query = """
         SELECT * FROM categorias;
       """
       
-      categorias = self.db.buscar(query)
+      categorias = self.__db.buscar(query)
       
       if categorias:
         print("\n---Lista de Categorias---\n")
@@ -39,7 +39,7 @@ class Categoria:
       print(f"\nErro ao listar produtos: {erro}\n")
 
 
-  def atualizarCategoria(self, id_categoria, nome):
+  def atualizar_categoria(self, id_categoria, nome):
     try:
       query = """
         UPDATE categorias
@@ -49,7 +49,7 @@ class Categoria:
       
       valores = (nome, id_categoria,)
       
-      self.db.execute(query, valores)
+      self.__db.execute(query, valores)
     
       print("\nCategoria atualizada com sucesso!\n")
 
@@ -57,14 +57,14 @@ class Categoria:
       print(f"Erro ao atualizar categoria: {erro}")
 
 
-  def excluirCategoria(self, id_categoria):
+  def excluir_categoria(self, id_categoria):
     try:
       query = """
         DELETE FROM categorias 
         WHERE id_categoria = %s;
       """
       
-      self.db.executar(query, (id_categoria,))
+      self.__db.executar(query, (id_categoria,))
 
       print("\nCategoria excluída com sucesso!\n")
 

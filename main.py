@@ -1,28 +1,27 @@
 from datetime import date
 from config import login_acesso
-
 from classes import Container, Usuario
+from classes.usuario import EmailInvalidoError, SenhaInvalidaError
 
 def login():
-  login = Usuario(
+  credenciais = Usuario(
     email=login_acesso["email"],
     senha=login_acesso["senha"]
   )
 
+  email = input("Email: ")
+  senha = input("senha: ") 
+
   try:
-    print("\n---Login---")
-
-    while True:
-      email = input("Email: ")
-      senha = input("senha: ")
-
-      if login.autenticar(email, senha) == True:
-        break
-      else:
-        continue
-
-  except Exception as erro:
-    print(f"Ocorreu um erro: {erro}")
+    mensagem = credenciais.autenticar(email, senha)
+    print(mensagem)
+    return True
+  except EmailInvalidoError as e:
+    print(e)
+    False
+  except SenhaInvalidaError as e:
+    print(e)
+    return False
 
 
 def menu_principal():
@@ -80,7 +79,9 @@ def menu_fornecedores():
 
 
 def main():
-  login()
+  while True:
+    if login():
+      break
 
   try:
     opcao = menu_principal()
@@ -99,25 +100,25 @@ def main():
           valor = float(input("Valor: R$"))
           quantidade = int(input("Quantidade: "))
 
-          container.categoria.listarCategoria()
+          container.categoria.listar_categoria()
           id_categoria = int(input("\nID da categoria do produto: "))
 
-          container.fornecedor.listarFornecedor()    
+          container.fornecedor.listar_fornecedor()    
           id_fornecedor = int(input("\nID do fornecedor do produto: "))
 
-          container.produto.cadastrarProduto(nome, valor, quantidade, id_categoria, id_fornecedor)
+          container.produto.cadastrar_produto(nome, valor, quantidade, id_categoria, id_fornecedor)
 
           container.fechar()
 
       elif opcao_produto == "2":
         if container.conectar():
-          container.produto.listarProduto()
+          container.produto.listar_produto()
 
           container.fechar()
 
       elif opcao_produto == "3":
         if container.conectar(): 
-          container.produto.listarProduto() 
+          container.produto.listar_produto() 
 
           id_produto = int(input("Qual ID do produto que deseja atualizar? "))
 
@@ -129,18 +130,18 @@ def main():
           id_categoria = input("Atualizar ID categoria: ").strip() or None
           id_fornecedor = input("Atualizar ID fornecedor: ").strip() or None
 
-          container.produto.atualizarProduto(id_produto, nome, valor, quantidade, id_categoria, id_fornecedor)
+          container.produto.atualizar_produto(id_produto, nome, valor, quantidade, id_categoria, id_fornecedor)
 
           container.fechar()
 
       elif opcao_produto == "4":
         if container.conectar():
 
-          container.produto.listarProduto()
+          container.produto.listar_produto()
 
           id_produto = int(input("Qual ID do produto deseja excluir? "))
 
-          container.produto.excluirProduto(id_produto)
+          container.produto.excluir_produto(id_produto)
 
           container.fechar()
 
@@ -151,15 +152,14 @@ def main():
         if container.conectar():
 
           data_venda = date.today()
-          container.produto.listarProduto()
+          container.produto.listar_produto()
           id_produto = int(input("ID do produto: "))
           quantidade = int(input("Quantidade: "))
 
-          if container.produto.consultarEstoque(id_produto, quantidade):
-            valor_unitario = container.produto.buscarValor(id_produto)
-
-            container.venda.cadastrarVenda(data_venda, id_produto, quantidade, valor_unitario)
-            container.produto.atualizarEstoque(id_produto, quantidade)
+          if container.produto.consultar_estoque(id_produto, quantidade):
+            valor_unitario = container.produto.pegar_valor(id_produto)
+            container.venda.cadastrar_venda(data_venda, id_produto, quantidade, valor_unitario)
+            container.produto.atualizar_estoque(id_produto, quantidade)
             
           else:
             print("Estoque insuficiente!")
@@ -168,7 +168,7 @@ def main():
 
       if opcao_venda == "2":
         if container.conectar():
-          container.venda.listarVenda()
+          container.venda.listar_venda()
 
           container.fechar()
 
@@ -179,34 +179,34 @@ def main():
         if container.conectar(): 
           
           nome = input("Nome: ")
-          container.categoria.cadastrarCategoria(nome) 
+          container.categoria.cadastrar_categoria(nome) 
           container.fechar()
       
       elif opcao_categoria == '2':
         if container.conectar(): 
-          container.categoria.listarCategoria() 
+          container.categoria.listar_categoria() 
           container.fechar()
       
       
       elif opcao_categoria == '3':
         if container.conectar(): 
-          container.categoria.listarCategoria() 
+          container.categoria.listar_categoria() 
 
           id_categoria = int(input("Qual ID do produto que deseja atualizar? "))
 
           nome = input("Atualizar para nome: ")
           
-          container.categoria.atualizarCategoria(id_categoria, nome) 
+          container.categoria.atualizar_categoria(id_categoria, nome) 
 
           container.fechar()
 
       elif opcao_categoria == '4':
         if container.conectar(): 
-          container.categoria.listarCategoria() 
+          container.categoria.listar_categoria() 
 
           id_categoria = int(input("\nQual ID do produto que deseja excluir? "))
 
-          container.categoria.excluirCategoria(id_categoria) 
+          container.categoria.excluir_categoria(id_categoria) 
 
           container.fechar()
 
@@ -219,19 +219,19 @@ def main():
           email = input("Email: ")
           telefone = input("Telefone: ")
 
-          container.fornecedor.cadastrarFornecedor(nome, email, telefone) 
+          container.fornecedor.cadastrar_fornecedor(nome, email, telefone) 
 
           container.fechar()
 
       elif opcao_fornecedor == "2":
         if container.conectar():
-          container.fornecedor.listarFornecedor() 
+          container.fornecedor.listar_fornecedor() 
 
           container.fechar()
 
       elif opcao_fornecedor == '3':
         if container.conectar(): 
-          container.fornecedor.listarFornecedor() 
+          container.fornecedor.listar_fornecedor() 
 
           id_fornecedor = int(input("Qual ID do fornecedor que deseja atualizar? "))
 
@@ -241,17 +241,17 @@ def main():
           email = input("Atualizar email: ").strip() or None
           telefone = input("Atualizar telefone: ").strip() or None
 
-          container.fornecedor.atualizarFornecedor(id_fornecedor, nome, email, telefone)
+          container.fornecedor.atualizar_fornecedor(id_fornecedor, nome, email, telefone)
 
           container.fechar()
       
       elif opcao_fornecedor == '4':
         if container.conectar(): 
-          container.fornecedor.listarFornecedor() 
+          container.fornecedor.listar_fornecedor() 
 
           id_fornecedor = int(input("Qual ID do fornecedor que deseja excluir? "))
 
-          container.fornecedor.excluirFornecedor(id_fornecedor) 
+          container.fornecedor.excluir_fornecedor(id_fornecedor) 
 
           container.fechar()
         
