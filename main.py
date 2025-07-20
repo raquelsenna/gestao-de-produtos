@@ -155,10 +155,12 @@ def main():
           id_produto = int(input("ID do produto: "))
           quantidade = int(input("Quantidade: "))
 
-          if container.produto.consultarEstoque(id_produto, quantidade):         
+          if container.produto.consultarEstoque(id_produto, quantidade):
             valor_unitario = container.produto.buscarValor(id_produto)
+
             container.venda.cadastrarVenda(data_venda, id_produto, quantidade, valor_unitario)
             container.produto.atualizarEstoque(id_produto, quantidade)
+            
           else:
             print("Estoque insuficiente!")
 
@@ -255,6 +257,5 @@ def main():
         
   except Exception as erro:
     print(f"Ocorreu um erro: {erro}")
-
 
 main()

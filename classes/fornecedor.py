@@ -1,3 +1,5 @@
+from database import Database
+
 class Fornecedor:
   def __init__(self, db):
     self.db = db
@@ -5,8 +7,6 @@ class Fornecedor:
 
   def cadastrarFornecedor(self, nome, email, telefone):
     try:
-      cursor = self.db.conexao.cursor()
-
       query = """
       INSERT INTO fornecedores (nome, email, telefone)
       VALUES(%s, %s, %s)
@@ -14,43 +14,35 @@ class Fornecedor:
 
       valores = (nome, email, telefone,)
 
-      cursor.execute(query, valores)  
-      self.db.conexao.commit()
+      self.db.executar(query, valores)
+
       print("Fornecedor cadastrado com Sucesso!")
     
     except Exception as erro:
       print(f"Erro ao cadastrar fornecedor: {erro}")
 
-    finally:
-      if cursor:
-        cursor.close()
-
 
   def listarFornecedor(self):
     try:
-      cursor = self.db.conexao.cursor()
-
       query = """
         SELECT * FROM fornecedores;
       """
       
-      cursor.execute(query)
-      fornecedores = cursor.fetchall()
+      fornecedores = self.db.buscar(query)
       
       if fornecedores:
         print("\n---Lista de Fornecedores---\n")
         for fornecedor in fornecedores:
           print(f"ID: {fornecedor[0]}, Nome: {fornecedor[1]}, Email: {fornecedor[2]}, Telefone: {fornecedor[3]}")
+      else: 
+        print("Não há produtos")
 
-    finally:
-      if cursor:
-        cursor.close()
+    except Database.mysql.connector.Error as erro:
+      print(f"\nErro ao listar fornecedores: {erro}\n")
 
 
   def atualizarFornecedor(self, id_fornecedor, nome, email, telefone):
     try:
-      cursor = self.db.conexao.cursor()
-
       campos = []
       valores = []
 
@@ -74,34 +66,24 @@ class Fornecedor:
       
       valores.append(id_fornecedor)
 
-      cursor.execute(query, valores)
-      self.db.conexao.commit()
+      self.db.executar(query, valores)
+
       print("\nFornecedor atualizado com sucesso!\n")
 
     except Exception as erro:
       print(f"Erro ao atualizar fornecedor: {erro}")
 
-    finally:
-      if cursor:
-        cursor.close()
-
 
   def excluirFornecedor(self, id_fornecedor):
     try:
-      cursor = self.db.conexao.cursor()
-
       query = """
         DELETE FROM fornecedores 
         WHERE id_fornecedor = %s;
       """
-      
-      cursor.execute(query, (id_fornecedor,))
-      self.db.conexao.commit()
+
+      self.db.executar(query, (id_fornecedor,))
+
       print("\nFornecedor excluído com sucesso!\n")
 
     except Exception as erro:
       print(f"Erro ao excluir fornecedor: {erro}")
-
-    finally:
-      if cursor:
-        cursor.close()

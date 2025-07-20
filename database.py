@@ -1,6 +1,5 @@
 import mysql.connector
-from mysql.connector import Error
-
+# from mysql.connector import Error
 
 class Database:
   def __init__(self, host, user, password, database):
@@ -30,23 +29,23 @@ class Database:
 
   def executar(self, query, valores):
     cursor = self.conexao.cursor()
-    cursor.execute(query, valores or ())
+    print("cursor criado")
+    print(f"Tipos dos valores: {[type(v) for v in valores]}")
+    print("Valores:", valores)
+    cursor.execute(query, valores) # ERRO
+    print("query executada")
     self.conexao.commit()
+    print("alteraçoes salvas")
     cursor.close()
+    print("cursor fechado")
 
 
-  def buscar(self, query, valores):
+  def buscar(self, query, valores=None):
     cursor = self.conexao.cursor()
     cursor.execute(query, valores or ())
-    resultados = cursor.fetchall()
+    resultados = cursor.fetchall() # fetchone sempre retorna uma tupla
     cursor.close()
     return resultados
-
-  # Confirma as alterações no banco de dados
-  # def commit(self):
-  #   if self.conexao:
-  #     self.conexao.commit()
-  #     print("\nAlterações confirmadas no banco de dados.")
       
   # encerra a conexão com banco de dados
   def fechar(self): 
