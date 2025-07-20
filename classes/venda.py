@@ -2,21 +2,20 @@ from database import Database
 
 class Venda():
   def __init__(self, db):
-    self.db = db
+    self.__db = db
 
-  def cadastrarVenda(self, data_venda, id_produto, quantidade, valor_unitario):
+  def cadastrar_venda(self, data_venda, id_produto, quantidade, valor_unitario):
     try:
       valor_total = valor_unitario * quantidade
 
-      print("iniciando query")
       query = """
         INSERT INTO vendas (data_venda, id_produto, quantidade, valor_total)
         VALUES (%s, %s, %s, %s)
         """
-
+      
       valores = (data_venda, id_produto, quantidade, valor_total,)
       
-      self.db.executar(query, valores)
+      self.__db.executar(query, valores)
 
       print("\nVenda cadastrada com sucesso!\n")
 
@@ -24,13 +23,13 @@ class Venda():
       print(f"Erro ao cadastrar venda: {erro}")
 
 
-  def listarVenda(self):
+  def listar_venda(self):
     try:
       query = """
       SELECT * FROM vendas
       """
       
-      vendas = self.db.buscar(query)
+      vendas = self.__db.buscar(query)
 
       if vendas:
         print("\n---Lista de Vendas---\n")
