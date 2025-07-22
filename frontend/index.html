@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestão de Produtos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="index.html">   Gestão<span>Produtos</span></a></div>
+    <nav>
+      <ul>
+        <li><a href="produtos.html">Produtos</a></li>
+        <li><a href="categorias.html">Categorias</a></li>
+        <li><a href="fornecedores.html">Fornecedores</a></li>
+        <li><a href="vendas.html">Vendas</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="dashboard">
+      <div class="card">
+        <h3>Total de Produtos</h3>
+        <p>120</p>
+      </div>
+      <div class="card">
+        <h3>Estoque Baixo</h3>
+        <p>8</p>
+      </div>
+      <div class="card">
+        <h3>Vendas Hoje</h3>
+        <p>R$ 1.340,00</p>
+      </div>
+      <div class="card">
+        <h3>Fornecedores Ativos</h3>
+        <p>12</p>
+      </div>
+    </section>
+
+    <section class="actions">
+      <button>+ Novo Produto</button>
+      <button><a href="vendas.html">+ Nova Venda</a></button>
+    </section>
+
+    <section class="table-section">
+      <h2>Últimos Produtos Cadastrados</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Preço</th>
+            <th>Estoque</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Monitor 24”</td>
+            <td>Eletrônicos</td>
+            <td>R$ 800,00</td>
+            <td>15</td>
+            <td><a href="#">Editar</a> | <a href="#">Excluir</a></td>
+          </tr>
+          <tr>
+            <td>Teclado Mecânico</td>
+            <td>Acessórios</td>
+            <td>R$ 250,00</td>
+            <td>9</td>
+            <td><a href="#">Editar</a> | <a href="#">Excluir</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

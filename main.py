@@ -1,33 +1,27 @@
-# importar biblioteca padrão
 from datetime import date
-
-# importar módulos internos  
-from database import Database
-from config import db_config, login_acesso
-
-# importar classes
-from classes import Produto, Categoria, Fornecedor, Venda, Usuario
+from config import login_acesso
+from classes import Container, Usuario
+from classes.usuario import EmailInvalidoError, SenhaInvalidaError
 
 def login():
-  login = Usuario(
+  credenciais = Usuario(
     email=login_acesso["email"],
     senha=login_acesso["senha"]
   )
 
+  email = input("Email: ")
+  senha = input("senha: ") 
+
   try:
-    print("\n---Login---")
-
-    while True:
-      email = input("Email: ")
-      senha = input("senha: ")
-
-      if login.entrar(email, senha) == True:
-        break
-      else:
-        continue
-
-  except Exception as erro:
-    print(f"Ocorreu um erro: {erro}")
+    mensagem = credenciais.autenticar(email, senha)
+    print(mensagem)
+    return True
+  except EmailInvalidoError as e:
+    print(e)
+    False
+  except SenhaInvalidaError as e:
+    print(e)
+    return False
 
 
 def menu_principal():
@@ -57,9 +51,7 @@ def menu_vendas():
   print("""\n---Gerenciar Vendas---
     
   [1] Cadastrar Vendas
-  [2] Listar Vendas
-  [3] Atualizar Vendas
-  [4] Excluir Vendas   
+  [2] Listar Vendas  
   """)
   return input("-> ")
 
@@ -87,57 +79,46 @@ def menu_fornecedores():
 
 
 def main():
-  login()
-
-  db = Database(
-    host=db_config["host"],
-    user=db_config["user"],
-    password=db_config["password"],
-    database=db_config["database"]
-  ) 
+  while True:
+    if login():
+      break
 
   try:
     opcao = menu_principal()
+    container = Container()
 
     if opcao == "1":
 
       opcao_produto = menu_produtos()
 
       if opcao_produto == "1":
-        if db.conectar(): 
-          produto = Produto(db)
-          categoria = Categoria(db)
-          fornecedor = Fornecedor(db)
+        if container.conectar(): 
         
-        print("\n---Cadastrar Produtos---\n")
+          print("\n---Cadastrar Produtos---\n")
 
-        nome = input("Nome: ")
-        valor = float(input("Valor: R$"))
-        quantidade = int(input("Quantidade: "))
+          nome = input("Nome: ")
+          valor = float(input("Valor: R$"))
+          quantidade = int(input("Quantidade: "))
 
-        categoria.listarCategoria()
-        id_categoria = int(input("\nID da categoria do produto: "))
+          container.categoria.listar_categoria()
+          id_categoria = int(input("\nID da categoria do produto: "))
 
-        fornecedor.listarFornecedor()    
-        id_fornecedor = int(input("\nID do fornecedor do produto: "))
+          container.fornecedor.listar_fornecedor()    
+          id_fornecedor = int(input("\nID do fornecedor do produto: "))
 
-        produto.cadastrarProduto(nome, valor, quantidade, id_categoria, id_fornecedor)
+          container.produto.cadastrar_produto(nome, valor, quantidade, id_categoria, id_fornecedor)
 
-        db.fechar()
+          container.fechar()
 
       elif opcao_produto == "2":
-        if db.conectar():
-          produto = Produto(db)
+        if container.conectar():
+          container.produto.listar_produto()
 
-        produto.listarProduto()
-
-        db.fechar()
+          container.fechar()
 
       elif opcao_produto == "3":
-        if db.conectar(): 
-          produto = Produto(db) # Cria instancia da classe produto
-
-          produto.listarProduto() 
+        if container.conectar(): 
+          container.produto.listar_produto() 
 
           id_produto = int(input("Qual ID do produto que deseja atualizar? "))
 
@@ -149,125 +130,108 @@ def main():
           id_categoria = input("Atualizar ID categoria: ").strip() or None
           id_fornecedor = input("Atualizar ID fornecedor: ").strip() or None
 
-          produto.atualizarProduto(id_produto, nome, valor, quantidade, id_categoria, id_fornecedor)
+          container.produto.atualizar_produto(id_produto, nome, valor, quantidade, id_categoria, id_fornecedor)
 
-          db.fechar()
+          container.fechar()
 
       elif opcao_produto == "4":
-        if db.conectar():
-          produto = Produto(db)
+        if container.conectar():
 
-        produto.listarProduto()
+          container.produto.listar_produto()
 
-        id_produto = int(input("Qual ID do produto deseja excluir? "))
+          id_produto = int(input("Qual ID do produto deseja excluir? "))
 
-        produto.excluirProduto(id_produto)
+          container.produto.excluir_produto(id_produto)
 
-        db.fechar()
+          container.fechar()
 
     if opcao == "2":
       opcao_venda = menu_vendas()
 
       if opcao_venda == "1":
-        if db.conectar():
-          venda = Venda(db)
-          produto = Produto(db)
+        if container.conectar():
 
-        data_venda = date.today()
-        produto.listarProduto()
-        id_produto = int(input("ID do produto: "))
-        quantidade = int(input("Quantidade: "))
+          data_venda = date.today()
+          container.produto.listar_produto()
+          id_produto = int(input("ID do produto: "))
+          quantidade = int(input("Quantidade: "))
 
-        if produto.consultarEstoque(id_produto, quantidade):         
-          valor_unitario = produto.buscarValor(id_produto)
-          venda.cadastrarVenda(data_venda, id_produto, quantidade, valor_unitario)
-          produto.atualizarEstoque(id_produto, quantidade)
-        else:
-          print("Estoque insuficiente!")
+          if container.produto.consultar_estoque(id_produto, quantidade):
+            valor_unitario = container.produto.pegar_valor(id_produto)
+            container.venda.cadastrar_venda(data_venda, id_produto, quantidade, valor_unitario)
+            container.produto.atualizar_estoque(id_produto, quantidade)
+            
+          else:
+            print("Estoque insuficiente!")
 
-        db.fechar()
+          container.fechar()
 
       if opcao_venda == "2":
-        if db.conectar():
-          venda = Venda(db)
+        if container.conectar():
+          container.venda.listar_venda()
 
-        venda.listarVenda()
-
-        db.fechar()
+          container.fechar()
 
     if opcao == "3":
       opcao_categoria = menu_categorias()
 
       if opcao_categoria == "1":
-        if db.conectar(): 
-          categoria = Categoria(db) # Cria instancia da classe Categoria
+        if container.conectar(): 
           
           nome = input("Nome: ")
-          categoria.cadastrarCategoria(nome) 
-          db.fechar()
+          container.categoria.cadastrar_categoria(nome) 
+          container.fechar()
       
       elif opcao_categoria == '2':
-        if db.conectar(): 
-          categoria = Categoria(db) # Cria instancia da classe Categoria
-
-          categoria.listarCategoria() 
-          db.fechar()
+        if container.conectar(): 
+          container.categoria.listar_categoria() 
+          container.fechar()
       
       
       elif opcao_categoria == '3':
-        if db.conectar(): 
-          categoria = Categoria(db) # Cria instancia da classe Categoria
-
-          categoria.listarCategoria() 
+        if container.conectar(): 
+          container.categoria.listar_categoria() 
 
           id_categoria = int(input("Qual ID do produto que deseja atualizar? "))
 
           nome = input("Atualizar para nome: ")
           
-          categoria.atualizarCategoria(id_categoria, nome) 
+          container.categoria.atualizar_categoria(id_categoria, nome) 
 
-          db.fechar()
+          container.fechar()
 
       elif opcao_categoria == '4':
-        if db.conectar(): 
-          categoria = Categoria(db) # Cria instancia da classe Categoria
-
-          categoria.listarCategoria() 
+        if container.conectar(): 
+          container.categoria.listar_categoria() 
 
           id_categoria = int(input("\nQual ID do produto que deseja excluir? "))
 
-          categoria.excluirCategoria(id_categoria) 
+          container.categoria.excluir_categoria(id_categoria) 
 
-          db.fechar()
+          container.fechar()
 
     if opcao == "4":
       opcao_fornecedor = menu_fornecedores()
 
       if opcao_fornecedor == "1":
-        if db.conectar(): 
-          fornecedor = Fornecedor(db) # Cria instancia da classe Fornecedor
-          
+        if container.conectar():  
           nome = input("Nome: ")
           email = input("Email: ")
           telefone = input("Telefone: ")
 
-          fornecedor.cadastrarFornecedor(nome, email, telefone) 
+          container.fornecedor.cadastrar_fornecedor(nome, email, telefone) 
 
-          db.fechar()
+          container.fechar()
 
       elif opcao_fornecedor == "2":
-        if db.conectar():
-          fornecedor = Fornecedor(db)
+        if container.conectar():
+          container.fornecedor.listar_fornecedor() 
 
-          fornecedor.listarFornecedor() 
-
-          db.fechar()
+          container.fechar()
 
       elif opcao_fornecedor == '3':
-        if db.conectar(): 
-          fornecedor = Fornecedor(db) # Cria instancia da classe fornecedor
-
-          fornecedor.listarFornecedor() 
+        if container.conectar(): 
+          container.fornecedor.listar_fornecedor() 
 
           id_fornecedor = int(input("Qual ID do fornecedor que deseja atualizar? "))
 
@@ -277,24 +241,21 @@ def main():
           email = input("Atualizar email: ").strip() or None
           telefone = input("Atualizar telefone: ").strip() or None
 
-          fornecedor.atualizarFornecedor(id_fornecedor, nome, email, telefone)
+          container.fornecedor.atualizar_fornecedor(id_fornecedor, nome, email, telefone)
 
-          db.fechar()
+          container.fechar()
       
       elif opcao_fornecedor == '4':
-        if db.conectar(): 
-          fornecedor = Fornecedor(db) # Cria instancia da classe fornecedor
-
-          fornecedor.listarFornecedor() 
+        if container.conectar(): 
+          container.fornecedor.listar_fornecedor() 
 
           id_fornecedor = int(input("Qual ID do fornecedor que deseja excluir? "))
 
-          fornecedor.excluirFornecedor(id_fornecedor) 
+          container.fornecedor.excluir_fornecedor(id_fornecedor) 
 
-          db.fechar()
+          container.fechar()
         
   except Exception as erro:
     print(f"Ocorreu um erro: {erro}")
-
 
 main()

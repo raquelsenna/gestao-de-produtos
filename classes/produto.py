@@ -2,112 +2,101 @@ from database import Database
 
 class Produto:
   def __init__(self, db):
-    self.db = db
-  
+    self.__db = db
 
-  def consultarEstoque(self, id_produto, quantidade_venda):
-    try:
-      cursor = self.db.conexao.cursor()
-      
+
+  def pegar_valor(self, id_produto):
+    return self.__buscar_valor(id_produto)
+
+
+  def __buscar_estoque(self, id_produto): # encapsulado
+    query = """
+        SELECT quantidade 
+        FROM produtos
+        WHERE id_produto = %s
+        """    
+        
+    resultado = self.__db.buscar(query, (id_produto,)) 
+
+    if not resultado:
+      return None
+
+    def __buscar_estoque(self, id_produto):
       query = """
         SELECT quantidade 
         FROM produtos
         WHERE id_produto = %s
-        """
-
-      cursor.execute(query, (id_produto,))
-
-      resultado = cursor.fetchone() # fetchone sempre retorna uma tupla
-
-      if resultado is None:
-        print("Erro ao encontrar quantidade")
-        return False
-      
-      quantidade_estoque = resultado[0] # exemplo: resultado retorna [10,], ou seja, uma tupla, e resultado[0] retorna [10].
-      quantidade_atualizada = quantidade_estoque - quantidade_venda
-
-      if quantidade_atualizada < 0:
-        return False
-      
-      return True
-
-    except Database.mysql.connector.Error as erro:
-      print(f"Erro ao consultar quantidade no estoque: {erro}")
+        """    
         
-    finally:
-      if cursor:
-        cursor.close()
+    resultado = self.__db.buscar(query, (id_produto,)) 
+
+    if resultado is None:
+      return False
+
+    print("Retornando resultado")
+    print(resultado[0][0])
+    return resultado[0][0] # exemplo: resultado retorna [10,], ou seja, uma tupla, e resultado[0] retorna [10].
 
 
-  def buscarValor(self, id_produto):
+  def __buscar_valor(self, id_produto): # encapsulado
     try:
-      cursor = self.db.conexao.cursor()
-      
       query = """
         SELECT valor 
         FROM produtos
         WHERE id_produto = %s
         """
 
-      cursor.execute(query, (id_produto,))
-      valor = cursor.fetchone()
-      cursor.close()
+      resultado = self.__db.buscar(query, (id_produto,))
 
-      return valor[0] if valor else 0 
+      if resultado:
+        return resultado[0][0]
+
+      return None
   
     except Database.mysql.connector.Error as erro:
       print(f"Erro ao cadastrar produto: {erro}")
-        
-    finally:
-      if cursor:
-        cursor.close()
 
 
-  def atualizarEstoque(self, id_produto, quantidade_venda):
+  def consultar_estoque(self, id_produto, quantidade):
     try:
-      cursor = self.db.conexao.cursor()
-      
-      query = """
-        SELECT quantidade 
-        FROM produtos
-        WHERE id_produto = %s
-        """
+      print("Consultando...")
+      quantidade_estoque = self.__buscar_estoque(id_produto)
+      print("Achou valor estoque")
+      quantidade_simulada = quantidade_estoque - quantidade
+      print("Gerou estoque atualizado")
 
-      cursor.execute(query, (id_produto,))
+      if quantidade_simulada < 0:
+        return False 
+        
+      return True 
 
-      resultado = cursor.fetchone()
+    except Database.mysql.connector.Error as erro:
+      print(f"Erro ao consultar quantidade no estoque: {erro}")
 
-      if resultado is None:
-        print("Erro ao encontrar quantidade no estoque.")
-        return
 
-      quantidade_estoque = resultado[0]
-      quantidade_atualizada = quantidade_estoque - quantidade_venda
-
+  def atualizar_estoque(self, id_produto, quantidade):
+    try:
       query = f"""
         UPDATE produtos
         SET quantidade = %s
         WHERE id_produto = %s;
       """
       
-      valores = (quantidade_atualizada, id_produto)
+      quantidade_estoque = self.__buscar_estoque(id_produto)
+      quantidade_atualizada = quantidade_estoque - quantidade
 
-      cursor.execute(query, valores)
-      self.db.conexao.commit()
-      print("\nQuantidade no estoque atualizado com sucesso!")
+      valores = (quantidade_atualizada, id_produto,)
+
+      self.__db.executar(query, valores)
+      
+      print("\nEstoque atualizado com sucesso!")
 
     except Database.mysql.connector.Error as erro:
       print(f"Erro ao atualizar quantidade no estoque: {erro}")
       
-    finally:
-      if cursor:
-        cursor.close()
 
-
-  def cadastrarProduto(self, nome, valor, quantidade, id_categoria, id_fornecedor):
+  def cadastrar_produto(self, nome, valor, quantidade, id_categoria, id_fornecedor):
     try:
-      cursor = self.db.conexao.cursor()
-
       query = """
       INSERT INTO produtos (nome, valor, quantidade, id_categoria, id_fornecedor)
       VALUES (%s, %s, %s, %s, %s)
@@ -115,51 +104,37 @@ class Produto:
 
       valores = (nome, valor, quantidade, id_categoria, id_fornecedor,)
 
-      cursor.execute(query, valores)
-      self.db.conexao.commit()
+      self.__db.executar(query, valores)
 
       print("\nProduto cadastrado com sucesso!\n")
 
     except Database.mysql.connector.Error as erro:
       print(f"Erro ao cadastrar produto: {erro}")
-      
-    finally:
-      if cursor:
-        cursor.close()
 
 
-  def listarProduto(self):
+  def listar_produto(self):
     try:
-      cursor = self.db.conexao.cursor()
-      
       query = """
       SELECT * FROM produtos; 
       """
 
-      cursor.execute(query)
-      produtos = cursor.fetchall()
-
+      produtos = self.__db.buscar(query)
+      
       if produtos:
         print("\n--Lista de Produtos--\n")
 
         for produto in produtos:
           print(f"ID: {produto[0]}, Nome: {produto[1]}, Valor: {produto[2]}, Quantidade: {produto[3]}, Id_categoria: {produto[4]}, Id_fornecedor: {produto[5]}\n")
-      
+        
       else: 
         print("Não há produtos.")
 
     except Database.mysql.connector.Error as erro:
-      print(f"\nErro ao cadastrar produto: {erro}\n")
-      
-    finally:
-      if cursor:
-        cursor.close()
+      print(f"\nErro ao listar produtos: {erro}\n")
 
 
-  def atualizarProduto(self, id_produto, nome, valor, quantidade, id_categoria, id_fornecedor):
+  def atualizar_produto(self, id_produto, nome, valor, quantidade, id_categoria, id_fornecedor):
     try:
-      cursor = self.db.conexao.cursor()
-
       campos = []
       valores = []
 
@@ -191,34 +166,26 @@ class Produto:
       
       valores.append(id_produto)
 
-      cursor.execute(query, valores)
-      self.db.conexao.commit()
+      self.__db.executar(query, valores)
+      
       print("\nProduto atualizado com sucesso!")
 
     except Exception as erro:
       print(f"Erro ao atualizar produto: {erro}")
 
-    finally:
-      if cursor:
-        cursor.close()
 
-
-  def excluirProduto(self, id_produto): 
+  def excluir_produto(self, id_produto): 
     try:
-      cursor = self.db.conexao.cursor()
-
       query = """
       DELETE FROM produtos
       WHERE id_produto = %s;
       """
 
-      cursor.execute(query, (id_produto,))
-      self.db.conexao.commit()
+      self.__db.executar(query, (id_produto,))
+      
       print("\nProduto excluído com sucesso!")
   
-    except Exception as erro:
+    except Database.mysql.connector.Error as erro:
       print(f"Erro ao excluir produto: {erro}")
 
-    finally:
-      if cursor:
-        cursor.close()
+
