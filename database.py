@@ -29,15 +29,15 @@ class Database:
 
   def executar(self, query, valores):
     cursor = self.conexao.cursor()
-    cursor.execute(query, valores) # ERRO
+    cursor.execute(query, valores) 
     self.conexao.commit()
     cursor.close()
 
 
   def buscar(self, query, valores=None):
     cursor = self.conexao.cursor()
-    cursor.execute(query, valores or ())
-    resultados = cursor.fetchall() # fetchone sempre retorna uma tupla
+    cursor.execute(query, valores or None)
+    resultados = cursor.fetchall() # fetchall sempre retorna uma tupla
     cursor.close()
     return resultados
       

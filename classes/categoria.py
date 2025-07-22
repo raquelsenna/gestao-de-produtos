@@ -5,7 +5,7 @@ class Categoria:
     self.__db = db
 
 
-  def cadastrar_Categoria(self, nome):
+  def cadastrar_categoria(self, nome):
     try:
       query = """
       INSERT INTO categorias (nome)
@@ -32,9 +32,13 @@ class Categoria:
       
       if categorias:
         print("\n---Lista de Categorias---\n")
+
         for categoria in categorias:
           print(f"ID: {categoria[0]}, Nome: {categoria[1]}")
-    
+
+      else: 
+        print("Não há categorias.")
+
     except Database.mysql.connector.Error as erro:
       print(f"\nErro ao listar produtos: {erro}\n")
 
@@ -49,7 +53,7 @@ class Categoria:
       
       valores = (nome, id_categoria,)
       
-      self.__db.execute(query, valores)
+      self.__db.executar(query, valores)
     
       print("\nCategoria atualizada com sucesso!\n")
 
