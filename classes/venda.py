@@ -1,9 +1,11 @@
 from database import Database
+from erros.decoradores import gerenciar_conexao 
 
 class Venda():
   def __init__(self, db):
-    self.__db = db
+    self._db = db
 
+  @gerenciar_conexao
   def cadastrar_venda(self, data_venda, id_produto, quantidade, valor_unitario):
     try:
       valor_total = valor_unitario * quantidade
@@ -15,21 +17,21 @@ class Venda():
       
       valores = (data_venda, id_produto, quantidade, valor_total,)
       
-      self.__db.executar(query, valores)
+      self._db.executar(query, valores)
 
       print("\nVenda cadastrada com sucesso!\n")
 
     except Database.mysql.connector.Error as erro:
       print(f"Erro ao cadastrar venda: {erro}")
 
-
+  @gerenciar_conexao
   def listar_venda(self):
     try:
       query = """
       SELECT * FROM vendas
       """
       
-      vendas = self.__db.buscar(query)
+      vendas = self._db.buscar(query)
 
       if vendas:
         print("\n---Lista de Vendas---\n")

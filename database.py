@@ -1,5 +1,4 @@
 import mysql.connector
-# from mysql.connector import Error
 
 class Database:
   def __init__(self, host, user, password, database):
@@ -28,21 +27,33 @@ class Database:
 
 
   def executar(self, query, valores):
-    cursor = self.conexao.cursor()
-    cursor.execute(query, valores) 
-    self.conexao.commit()
-    cursor.close()
+    try:
+      cursor = self.conexao.cursor()
+      cursor.execute(query, valores) 
+      self.conexao.commit()
+
+    except mysql.connector.Error as err:
+      print(f"\nErro ao executar query: {err}")
+
+    finally:
+      cursor.close()
 
 
   def buscar(self, query, valores=None):
-    cursor = self.conexao.cursor()
-    cursor.execute(query, valores or None)
-    resultados = cursor.fetchall() # fetchall sempre retorna uma tupla
-    cursor.close()
-    return resultados
+    try:
+      cursor = self.conexao.cursor()
+      cursor.execute(query, valores or None)
+      resultados = cursor.fetchall() # fetchall sempre retorna uma tupla
+      return resultados
+    
+    except mysql.connector.Error as err:
+      print(f"\nErro ao executar query: {err}")
+      
+    finally:
+      cursor.close()
       
   # encerra a conexão com banco de dados
   def fechar(self): 
-    if self.conexao and self.conexao.is_connected:
+    if self.conexao and self.conexao.is_connected():
       self.conexao.close()
       print("\nConexão com o banco de dados encerrada.")
